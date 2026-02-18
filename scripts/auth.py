@@ -22,6 +22,12 @@ class Auth:
             json.dump(self.database, arq, indent=4, ensure_ascii=False)
         return True, f"Usuário cadastrado, seja bem vindo {username}! | Seu current balance é ${self.database[username]["current balance"]}"
 
+    def withdraw(self, username, password):
+        if Auth.user_exists(username) == "False":
+            return False, "Usuário não encontrado"
+        self.database[username]["current balance"] += self.database[username]["pending incoming"]
+        with open(file_path, "r", encoding="utf-8") as arq:
+            json.dump(self.database, arq, indent=4, ensure_ascii=False)
     def user_exists(self, username):
         if username not in self.database:
             return False
@@ -66,10 +72,10 @@ class Auth:
             return info
         else:
             return False, f"O usuário {username}, não existe!"
-    def deposit(self, user, password, amount):
+    def deposit(self, user, amount):
         if user not in self.database:
             return False, "User not found!"
         self.database[user]["current balance"] += amount
         with open (file_path, "w", encoding="utf-8") as arq:
             json.dump(self.database, arq, indent=4, ensure_ascii=False)
-        return True, f"Deposito feito com sucesso! Agora o usuário {user} tem o saldo de ${self.database[user]["current balance"]}"
+        return True, f"Deposito feito com sucesso! Agora o usuário você tem o saldo de ${self.database[user]["current balance"]}"
