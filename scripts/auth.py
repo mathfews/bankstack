@@ -22,6 +22,11 @@ class Auth:
             json.dump(self.database, arq, indent=4, ensure_ascii=False)
         return True, f"Usuário cadastrado, seja bem vindo {username}! | Seu current balance é ${self.database[username]["current balance"]}"
 
+    def user_exists(self, username):
+        if username not in self.database:
+            return False
+        if username in self.database:
+            return True
     def login(self, username, password):
         if username not in self.database:
             return False, "Usuário não encontrado!"

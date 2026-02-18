@@ -8,16 +8,25 @@ def user_auth(type):
             clean_terminal()
             username = input("Enter your username(Digit 0 to return): ")
             if username == "0":
-                 clean_terminal()
-                 break
+                clean_terminal()
+                break
+            while True:
+                if type == "login" and auth.user_exists(username) == False:
+                    clean_terminal()
+                    print(f"O usuário {username} não foi encontrado!")
+                    username = input("Enter your username(Digit 0 to return): ")
+                elif type == "login" and auth.user_exists(username) == True:
+                    break
             password = input("Enter your password: ")
             result = getattr(auth, type)(username,password)
             if type == "register" and result[0] == True:
-                 print(f"{result[1]} | Press enter to go to login")
+                 print(f"{result[1]} | Press enter return")
                  input("")
-                 user_auth("login")
-            elif result[0] == True:
-                print(result[1])
+                 break
+            if result[0]:
+                print(f"{result[1]} | Press enter in your account")
+                input("")
+                break
             print(f"{result[1]} | Press enter to try again")
             input("")
 while True:
@@ -27,3 +36,4 @@ while True:
         user_auth("login")
     if user_input == "2" or user_input == "register":
         user_auth("register")
+    clean_terminal()
