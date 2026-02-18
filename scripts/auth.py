@@ -17,7 +17,7 @@ class Auth:
     def register(self, username,password):
         if username in self.database:
             return False, "Usuário já existente!"
-        self.database[username] = {"password":password,"current balance":0, "money to receive": 0}
+        self.database[username] = {"password":cryptography(password),"current balance":0, "money to receive": 0}
         with open(file_path, "w", encoding="utf-8") as arq:
             json.dump(self.database, arq, indent=4, ensure_ascii=False)
         return True, f"Usuário cadastrado, seja bem vindo {username}! | Seu current balance é ${self.database[username]["current balance"]}"
@@ -26,7 +26,7 @@ class Auth:
         if username not in self.database:
             return False, "Usuário não encontrado!"
         else:
-            if password != self.database[username]["password"]:
+            if cryptography(password) != self.database[username]["password"]:
                 return False, "Acesso negado!"
             return True, "Acesso concedido!"
     def transfer(self,active_user,active_password, received,amount):
@@ -34,6 +34,8 @@ class Auth:
             return False, "Usuário não encontrado!"
         elif received not in self.database:
             return False, "O usuário que você deseja enviar não existe!"
+        if cryptography(active_password) != self.database[active_user]["password"]:
+            return False, "Incorrent password!"
         if self.database[active_user]["current balance"] < amount:
             return False, "O usuário não tem saldo suficiente!"
         self.database[active_user]["current balance"] -= amount
@@ -47,10 +49,9 @@ class Auth:
         elif password != self.database[user]["password"]:
             return False, "Senha incorreta!"
         if self.database[user]["money to receive"] == "0":
-            return f"O usuário {user} tem o saldo {self.database[user]["current balance"]}, mas ele tem {self.database[user]["money to receive"]} para receber!"
+            return True, f"O usuário {user} tem o saldo {self.database[user]["current balance"]}, mas ele tem {self.database[user]["money to receive"]} para receber!"
         else:
-            return f"O usuário {user} tem o saldo ${self.database[user]["current balance"]}, mas ele tem ${self.database[user]["money to receive"]}"
-        return True
+            return True, f"O usuário {user} tem o saldo ${self.database[user]["current balance"]}, mas ele tem ${self.database[user]["money to receive"]}"
     def deposit(self, user, password, amount):
         if user not in self.database:
             return False, "User not found!"
