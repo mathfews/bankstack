@@ -39,6 +39,20 @@ def user_auth(type):
             input("")
 while True:
     while True:
+        print("Menu \n🔐1) Login\n📝2) Register")
+        user_input = input("> ").strip().lower()
+        if user_input == "1" or user_input == "login":
+            username = user_auth("login")
+            break
+        if user_input == "2" or user_input == "register":
+            user_auth("register")
+            break
+    while True:
+        clean_terminal()
+        user_info = auth.show_info(username)
+        bank_ui(username)
+        user_input = input("> ").strip().lower()
+        if user_input == "deposit" or user_input == "1":
                 while True:
                     try:
                         amount = float(input("> Deposit amount: "))
