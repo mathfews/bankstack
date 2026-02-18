@@ -7,11 +7,16 @@ def clean_terminal():
 def bank_ui(active_user):
     info = auth.show_info(active_user)
     bank_ui = f"""╔════════════════╗
-║   BANKSTACK    ║
+║  🏦 BANKSTACK  ║
 ╚════════════════╝
-Username :  {active_user}
-Current balance:  {info["current balance"]}
-Pending Incoming: {info["pending incoming"]}"""
+👤 Username :  {active_user}
+💰 Current balance:  ${info["current balance"]}
+📥 Pending Incoming: ${info["pending incoming"]}
+---------------------------
+1) Deposit ➕💵
+2) Withdraw ➖💸
+3) Transfer 🔄💰
+4) Exit 🚪"""
     print(bank_ui)
 
 def user_auth(type):
@@ -43,4 +48,12 @@ while True:
     while True:
          clean_terminal()
          bank_ui(username)
-         input("")
+         user_input = input("> ").strip().lower()
+         if user_input == "deposit" or user_input == "1":
+                while True:
+                    try:
+                        amount = float(input("Deposit amount: "))
+                        auth.deposit(username, amount)
+                    except (ValueError):
+                        "Invalid input. Please enter a valid number."
+                
