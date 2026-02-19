@@ -38,13 +38,11 @@ class Auth:
             if cryptography(password) != self.database[username]["password"]:
                 return False, "Acesso negado!"
             return True, "Acesso concedido!"
-    def transfer(self,active_user,active_password, recipient,amount):
+    def transfer(self,active_user, recipient,amount):
         if active_user not in self.database:
             return False, "Usuário não encontrado!"
         elif recipient not in self.database:
             return False, "O usuário que você deseja enviar não existe!"
-        if active_password != self.database[active_user]["password"]:
-            return False, "Incorret password!"
         if self.database[active_user]["current balance"] < amount:
             return False, "O usuário não tem saldo suficiente!"
         self.database[active_user]["current balance"] -= amount
