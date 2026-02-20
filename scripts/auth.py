@@ -39,6 +39,8 @@ class Auth:
                 return False, "Acesso negado!"
             return True, "Acesso concedido!"
     def transfer(self,active_user, recipient,amount):
+        if amount <= 0:
+            return False, "Please enter a positive number!"
         if active_user not in self.database:
             return False, "Usuário não encontrado!"
         elif recipient not in self.database:
