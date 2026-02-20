@@ -73,7 +73,7 @@ while True:
                 confirm = input(f"Confirm transfer of ${amount} to {recipient} (y/n) ") 
                 if confirm == "y":
                     break
-            result = auth.transfer(username,user_info["db_password"], recipient, amount)
+            result = auth.transfer(username,user_info["password"], recipient, amount)
             print(f"* {result[1]}")
             input("")
         elif user_input == "exit" or user_input == "4":
