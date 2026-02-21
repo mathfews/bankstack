@@ -57,7 +57,7 @@ while True:
                     try:
                         amount = float(input("> Deposit amount: "))
                         if auth.deposit(username, amount):
-                            print(f"Transferência feita com sucesso!")
+                            print(f"Transfer succesful!")
                             input("")
                             break
                     except ValueError:
