@@ -68,7 +68,7 @@ class Auth:
             info = {
                 "current balance": self.database[username]["current balance"],
                 "pending incoming": self.database[username]["pending incoming"],
-                "db_password": self.database[username]["password"]
+                "password": self.database[username]["password"]
             }
             return info
         else:
