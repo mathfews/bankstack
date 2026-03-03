@@ -1,36 +1,44 @@
-import os
+import os, questionary
 from auth import Auth
 auth = Auth()
 def clean_terminal():
     os.system("cls" if os.name == "nt" else "clear")
 
 def bank_ui(active_user):
+    options = {
+        "1) Deposit ➕💵": "deposit",
+        "2) Withdraw ➖💸": "withdraw",
+        "3) Transfer 🔄💰": "transfer",
+        "4) Refresh 🔄": "refresh",
+        "5) Exit 🚪": "exit"
+    }
     info = auth.show_info(active_user)
     bank_ui = f"""╔════════════════╗
 ║  🏦 BANKSTACK  ║
 ╚════════════════╝
 👤 Username :  {active_user}
 💰 Current balance:  ${info["current balance"]:.2f}
-📥 Pending Incoming: ${info["pending incoming"]:.2f}
----------------------------
-1) Deposit ➕💵
-2) Withdraw ➖💸
-3) Transfer 🔄💰
-4) Exit 🚪"""
+📥 Pending Incoming: ${info["pending incoming"]:.2f}"""
     print(bank_ui)
+    select = questionary.select(
+    "---------------------------",
+    choices=list(options.keys())
+    ).ask()
+    return options[select]
+
 def user_auth(type):
         while True:
             clean_terminal()
-            username = input("Enter your username(Digit 0 to return): ")
+            username = questionary.text("Enter your username(Digit 0 to return): ").ask()
             if username == "0":
                  clean_terminal()
                  break
-            password = input("Enter your password: ")
+            password = questionary.password("Enter your password: ").ask()
             result = getattr(auth, type)(username,password)
             if type == "register" and result[0] == True:
                  print(f"{result[1]} | Press enter return")
                  input("")
-                 break
+                 continue
             if result[0]:
                 print(f"{result[1]} | Press enter in your account")
                 input("")
@@ -39,23 +47,28 @@ def user_auth(type):
             input("")
 while True:
     while True:
-        print("Menu \n🔐1) Login\n📝2) Register")
-        user_input = input("> ").strip().lower()
-        if user_input == "1" or user_input == "login":
+        user_input = questionary.select(
+            "Menu",
+            choices=[
+                "🔐 Login",
+                "📝 Register"
+            ]
+        ).ask()
+        user_input = "login" if user_input == "🔐 Login" else "register"
+        if user_input == "login":
             username = user_auth("login")
             break
-        if user_input == "2" or user_input == "register":
-            user_auth("register")
-            break
+        if user_input == "register":
+            username = user_auth("register")
+            continue
     while True:
         clean_terminal()
         user_info = auth.show_info(username)
-        bank_ui(username)
-        user_input = input("> ").strip().lower()
-        if user_input == "deposit" or user_input == "1":
+        user_input = bank_ui(username)
+        if user_input == "deposit":
                 while True:
                     try:
-                        amount = float(input("> Deposit amount: "))
+                        amount = float(questionary.text("> Deposit amount: ").ask())
                         if auth.deposit(username, amount):
                             print(f"Transfer succesful!")
                             input("")
@@ -63,20 +76,27 @@ while True:
                     except ValueError:
                         print("Invalid input. Please enter a valid number.")
                         input("")
-        elif user_input == "withdraw" or user_input == "2":
+        elif user_input == "withdraw":
             print(auth.withdraw(username)[1])
             input("")
-        elif user_input == "transfer" or user_input == "3":
-            recipient = input("> Enter recipient username: ")
-            amount = float(input("> Enter amount to transfer: "))
+        elif user_input == "transfer":
+            recipient = questionary.text("> Enter recipient username: ").ask()
+            amount = float(questionary.text("> Enter amount to transfer: ").ask())
             while True:
-                confirm = input(f"Confirm transfer of ${amount} to {recipient} (y/n) ") 
-                if confirm == "y":
+                confirm = questionary.confirm(f"Confirm transfer of ${amount} to {recipient}").ask()
+                if confirm:
                     break
-            result = auth.transfer(username,user_info["password"], recipient, amount)
-            print(f"* {result[1]}")
-            input("")
-        elif user_input == "exit" or user_input == "4":
-            input("Press enter to exit")
+                else:
+                    break
+            if confirm:
+                result = auth.transfer(username, recipient, amount)
+                print(f"* {result[1]}")
+                input("")
+            else:
+                continue
+        elif user_input == "refresh":
+            continue
+        elif user_input == "exit":
+            questionary.press_any_key_to_continue("Press any key to exit...").ask()
             clean_terminal()
             break
