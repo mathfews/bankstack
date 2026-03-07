@@ -1,4 +1,4 @@
-# BankStack - Terminal Banking System in Python
+# BankStack – CLI Banking System in Python
 BankStack is a terminal-based banking system developed in Python to simulate core backend operations such as authentication, deposits, withdrawals, and transfers, with persistent data storage.
 
 This project was built to practice backend logic, data persistence, and system structure design.
@@ -14,6 +14,7 @@ This project was built to practice backend logic, data persistence, and system s
 - Financial transaction logic implementation
 - Clean and modular code structure
 - Separation of concerns and organized project structure
+- Interactive CLI using Questionary 
 
 ---
 
@@ -24,6 +25,7 @@ This project was built to practice backend logic, data persistence, and system s
 - Withdraw funds
 - Transfer money between users
 - Persistent data storage using a JSON-based database
+- Interactive CLI built with Questionary
 
 ---
 
@@ -31,6 +33,7 @@ This project was built to practice backend logic, data persistence, and system s
 - Python 3
 - JSON
 - hashlib (SHA-256)
+- Questionary (for interactive command-line prompts)
 
 ---
 
@@ -50,4 +53,4 @@ This project was built to practice backend logic, data persistence, and system s
 ---
 
 ## 📚 Learning Outcome
-Through this project, I strengthened my understanding of backend system design, data persistence strategies, and secure password handling. It also enhanced my ability to structure modular and maintainable small-scale applications.
+Through this project I practiced backend system design, JSON-based data persistence, secure password hashing, and building modular CLI applications.
